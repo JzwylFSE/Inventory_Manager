@@ -1,122 +1,204 @@
+{% load tz %}
+<!-- Enable timezone filters -->
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>ICT Item Manager</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 p-6">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ICT Item Manager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Custom shadow for card effect */
+      .custom-shadow {
+        box-shadow: 0 4px 24px 0 rgba(34, 197, 94, 0.1);
+      }
+      .table-header {
+        background: linear-gradient(90deg, #22c55e 0%, #16a34a 100%);
+      }
+      .table-header th {
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-gradient-to-br from-green-50 to-white min-h-screen text-gray-800"
+  >
+    <!-- Header with Logo -->
+    <header class="bg-green-700 text-white shadow-lg mb-10">
+      <div
+        class="max-w-6xl mx-auto flex items-center justify-between px-6 py-5"
+      >
+        <div class="flex items-center space-x-4">
+          <img
+            src="{% static 'obio-logo-3.png' %}"
+            alt="Hospital Logo"
+            class="h-14 drop-shadow-lg rounded-full bg-white p-1"
+          />
+          <h1 class="text-3xl font-extrabold tracking-wide drop-shadow">
+            ICT Item Manager
+          </h1>
+        </div>
+        <div class="hidden md:block text-green-100 text-sm font-medium">
+          Africa/Lagos Timezone (<span class="font-mono">WAT</span>)
+        </div>
+      </div>
+    </header>
 
-  {% load tz %} <!-- Enable timezone filters -->
+    <!-- Add Record Form -->
+    <div
+      class="max-w-2xl mx-auto bg-white p-8 rounded-2xl custom-shadow mb-10 border border-green-100"
+    >
+      <h2
+        class="text-2xl font-bold text-green-700 mb-6 flex items-center gap-2"
+      >
+        <svg
+          class="w-6 h-6 text-green-500"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          viewBox="0 0 24 24"
+        >
+          <path d="M12 4v16m8-8H4"></path>
+        </svg>
+        Log New Item
+      </h2>
+      <form method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {% csrf_token %}
+        <div>
+          <label class="block text-sm font-semibold mb-1">Date</label>
+          {{ form.date }} {{ form.date.errors }}
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-1">Time In</label>
+          {{ form.time_in }} {{ form.time_in.errors }}
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm font-semibold mb-1">Name</label>
+          {{ form.name }} {{ form.name.errors }}
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-1">Item</label>
+          {{ form.item }} {{ form.item.errors }}
+        </div>
+        <div>
+          <label class="block text-sm font-semibold mb-1">Location</label>
+          {{ form.location }} {{ form.location.errors }}
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm font-semibold mb-1">Phone Number</label>
+          {{ form.phone_number }} {{ form.phone_number.errors }}
+        </div>
+        <div class="md:col-span-2 flex justify-end">
+          <button
+            type="submit"
+            class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg shadow font-semibold transition"
+          >
+            Add Item
+          </button>
+        </div>
+      </form>
+    </div>
 
-  <!-- Add Record Form -->
-  <div class="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow mb-6">
-    <h1 class="text-xl font-bold mb-4">Log New Item</h1>
-    <form method="POST" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {% csrf_token %}
-      <!-- Render fields individually for nicer layout -->
-      <div>
-        <label class="block text-sm font-medium mb-1">Date</label>
-        {{ form.date }}
-        {{ form.date.errors }}
+    <!-- Records Table -->
+    <div
+      class="max-w-6xl mx-auto bg-white p-8 rounded-2xl custom-shadow border border-green-100"
+    >
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-bold text-green-700 flex items-center gap-2">
+          <svg
+            class="w-5 h-5 text-green-500"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M3 7v4a1 1 0 001 1h3m10 0h3a1 1 0 001-1V7m-1 12a2 2 0 01-2 2H6a2 2 0 01-2-2V7a2 2 0 012-2h12a2 2 0 012 2v12z"
+            ></path>
+          </svg>
+          Records
+        </h2>
       </div>
-      <div>
-        <label class="block text-sm font-medium mb-1">Time In</label>
-        {{ form.time_in }}
-        {{ form.time_in.errors }}
-      </div>
-      <div class="md:col-span-2">
-        <label class="block text-sm font-medium mb-1">Name</label>
-        {{ form.name }}
-        {{ form.name.errors }}
-      </div>
-      <div>
-        <label class="block text-sm font-medium mb-1">Item</label>
-        {{ form.item }}
-        {{ form.item.errors }}
-      </div>
-      <div>
-        <label class="block text-sm font-medium mb-1">Location</label>
-        {{ form.location }}
-        {{ form.location.errors }}
-      </div>
-      <div class="md:col-span-2">
-        <label class="block text-sm font-medium mb-1">Phone Number</label>
-        {{ form.phone_number }}
-        {{ form.phone_number.errors }}
-      </div>
-
-      <div class="md:col-span-2">
-        <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">
-          Add Record
-        </button>
-      </div>
-    </form>
-  </div>
-
-  <!-- Records Table -->
-  <div class="max-w-5xl mx-auto bg-white p-6 rounded-lg shadow">
-    <h2 class="text-lg font-bold mb-4">Records</h2>
-    <div class="overflow-x-auto">
-      <table class="min-w-full border-collapse border border-gray-300 text-sm">
-        <thead class="bg-gray-200">
-          <tr>
-            <th class="border px-3 py-2 text-left">Date</th>
-            <th class="border px-3 py-2 text-left">Name</th>
-            <th class="border px-3 py-2 text-left">Item</th>
-            <th class="border px-3 py-2 text-left">Location</th>
-            <th class="border px-3 py-2 text-left">Phone</th>
-            <th class="border px-3 py-2 text-left">Time In</th>
-            <th class="border px-3 py-2 text-left">Time Out</th>
-            <th class="border px-3 py-2 text-center">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for record in records %}
-          <tr class="odd:bg-gray-50">
-            <td class="border px-3 py-2">{{ record.date }}</td>
-            <td class="border px-3 py-2">{{ record.name }}</td>
-            <td class="border px-3 py-2">{{ record.item }}</td>
-            <td class="border px-3 py-2">{{ record.location }}</td>
-            <td class="border px-3 py-2">{{ record.phone_number }}</td>
-            <td class="border px-3 py-2">
-              {% localtime on %}
-                {{ record.time_in }}
-              {% endlocaltime %}
-            </td>
-            <td class="border px-3 py-2">
-              {% if record.time_out %}
-                {% localtime on %}
-                  {{ record.time_out }}
-                {% endlocaltime %}
-              {% else %}
+      <div class="overflow-x-auto rounded-lg border border-gray-200">
+        <table class="min-w-full border-collapse text-sm">
+          <thead class="table-header">
+            <tr>
+              <th class="border px-4 py-3 text-left">Date</th>
+              <th class="border px-4 py-3 text-left">Name</th>
+              <th class="border px-4 py-3 text-left">Item</th>
+              <th class="border px-4 py-3 text-left">Location</th>
+              <th class="border px-4 py-3 text-left">Phone</th>
+              <th class="border px-4 py-3 text-left">Time In</th>
+              <th class="border px-4 py-3 text-left">Time Out</th>
+              <th class="border px-4 py-3 text-center">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for record in records %}
+            <tr class="odd:bg-green-50 hover:bg-green-100 transition">
+              <td class="border px-4 py-2 font-medium">{{ record.date }}</td>
+              <td class="border px-4 py-2">{{ record.name }}</td>
+              <td class="border px-4 py-2">{{ record.item }}</td>
+              <td class="border px-4 py-2">{{ record.location }}</td>
+              <td class="border px-4 py-2">{{ record.phone_number }}</td>
+              <td class="border px-4 py-2 font-mono">
+                {% timezone "Africa/Lagos" %}{{ record.time_in }}{% endtimezone %}
+              </td>
+              <td class="border px-4 py-2 font-mono">
+                {% if record.time_out %} 
+                  {% timezone "Africa/Lagos" %}{{record.time_out }}{% endtimezone %} 
+                {% else %}
                 <span class="text-gray-400">—</span>
-              {% endif %}
-            </td>
-            <td class="border px-3 py-2 text-center">
-              {% if record.time_out %}
-                <span class="inline-block px-2 py-1 text-green-800 bg-green-100 rounded">Returned</span>
-              {% else %}
+                {% endif %}
+              </td>
+              <td class="border px-4 py-2 text-center">
+                {% if record.time_out %}
+                <span
+                  class="inline-block px-2 py-1 text-green-800 bg-green-100 rounded font-semibold"
+                  >Returned</span
+                >
+                {% else %}
                 <form method="POST" class="inline">
                   {% csrf_token %}
-                  <input type="hidden" name="return_id" value="{{ record.id }}">
-                  <button type="submit" class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">
+                  <input
+                    type="hidden"
+                    name="return_id"
+                    value="{{ record.id }}"
+                  />
+                  <button
+                    type="submit"
+                    class="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded shadow transition"
+                  >
                     Mark Returned
                   </button>
                 </form>
-              {% endif %}
-            </td>
-          </tr>
-          {% empty %}
-          <tr>
-            <td colspan="8" class="px-3 py-4 text-center text-gray-500">No records yet.</td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
+                {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="8" class="px-4 py-6 text-center text-gray-500">
+                No records yet.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
 
-</body>
+    <!-- Footer -->
+    <footer class="bg-green-700 text-white mt-16">
+      <div class="max-w-6xl mx-auto text-center py-5 text-sm tracking-wide">
+        © {{ now|date:"Y" }} Obio Cottage Hospital — ICT Department
+      </div>
+    </footer>
+
+    <!-- Optional: Widget styling for form fields -->
+    {% comment %} Add this to your forms.py widgets for a consistent look:
+    widgets = { 'date': forms.DateInput(attrs={'class': 'w-full border rounded
+    px-2 py-1'}), ... } {% endcomment %}
+  </body>
 </html>
