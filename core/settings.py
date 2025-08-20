@@ -83,12 +83,6 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-        # 'ENGINE': 'django.db.backends.postgresql',
-        # 'NAME': 'inventory_db',
-        # 'USER': 'postgres',
-        # 'PASSWORD': 'your_password_here',
-        # 'HOST': 'localhost',
-        # 'PORT': '5432',
     }
 }
 

@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
+from django.utils.html import format_html
 
-# Create your models here.
 class Record(models.Model): 
     # A log of items collected from ICT office
     date = models.DateField(default=timezone.now)
@@ -13,12 +13,19 @@ class Record(models.Model):
     time_out = models.TimeField(blank=True, null=True)
     
     def is_returned(self):
-        return f"{self.item} is returned at {self.time_out}" 
-
+        """Return True/False for logic"""
+        return bool(self.time_out)
+    is_returned.boolean = True
+    
+    def status_badge(self):
+        """Custom badge for admin panel"""
+        if self.time_out:
+            return format_html('<span style="color: white; background: green; padding: 3px 6px; border-radius: 4px;">Returned</span>')
+        return format_html('<span style="color: white; background: red; padding: 3px 6px; border-radius: 4px;">Not Returned</span>')
+    status_badge.short_description = "Status"
+    
     class Meta:
-        ordering = ['date']
+        ordering = ['-date', '-time_in']
         
     def __str__(self):
-        return f"Dr.{self.name} is with {self.item} at {self.location}"
-    
-    
+        return f"{self.name} → {self.item} ({'Returned' if self.time_out else 'Not Returned'})"
