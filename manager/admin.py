@@ -19,7 +19,7 @@ class RecordAdmin(admin.ModelAdmin):
     list_editable = ("time_out",) 
     list_display_links = ("name", "item", "location")
     fields = ("date", "name", "item", "location", "phone_number", "time_in", "time_out")
-    readonly_fields = ("time_in",)
+    # readonly_fields = ("time_in",)
 
     def status_badge(self, obj):
         """Show colored badge for return status in admin."""
